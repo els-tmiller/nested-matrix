@@ -39,4 +39,4 @@ jobs:
     steps:
       - name: output-string
         run: |
-          echo "matrix.target"
+          echo "${{ inputs.input-string }}"
