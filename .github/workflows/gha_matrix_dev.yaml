@@ -27,48 +27,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Split List
-        id: split-list
-        run: |
-          echo ${{ steps.create-list.outputs.target_list }} > targets.json
-          jq '
-            def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
-        
-            . as $arr
-            | ($arr | length) as $len
-            | ($len / 5 | ceil) as $batches
-            | [range($batches) as $i
-                | { ("batch" + ($i + 1 | tostring)):
-                    $arr[ ($i * 5) : ($i * 5 + 5) ] }
-              ] | add
-          ' targets.json > batches.json
-          cat batches.json
-          cat batches.json| jq
       - name: Output Batches
         id: output-batches
         run: |
-          #jq -c 'keys' test.json > test_batches.json
-          #cat test_batches.json | jq 
-          #echo "batch_keys=$(cat test_batches.json)" >> $GITHUB_OUTPUT
-          #cat test.json | jq 
-          #jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
-          #jq 'to_entries | map({batch: .key, accounts: .value})' -c test.json > test_matrix_data.json
-          #cat matrix_data.json
-          #cat test_matrix_data.json
-          #cat test_map.json | jq -c
-          #echo "matrix_data='$(cat test_map.json| jq -c)'" >> $GITHUB_OUTPUT
-          #jq 'to_entries | map({batch: .key, accounts: .value})' -c test.json > matrix_data.json
-          #cat matrix_data.json
-          #cat matrix_data.json | jq -c
-          #echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
-
-          #jq 'to_entries | map({batch: .key, accounts: .value})' -c test2.json > matrix_data.json
           jq -c 'keys' test2.json > batch_keys.json  
           cat batch_keys.json
           jq -c . test2.json > batches.json
-          #cat matrix_data.json
-          #cat matrix_data.json | jq
-          #echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
           echo "batch_keys=$(cat batch_keys.json)" >> $GITHUB_OUTPUT
           echo "batches=$(cat batches.json)" >> $GITHUB_OUTPUT
 
