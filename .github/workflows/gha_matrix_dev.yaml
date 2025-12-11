@@ -62,19 +62,25 @@ jobs:
           #cat matrix_data.json | jq -c
           #echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
 
-          jq 'to_entries | map({batch: .key, accounts: .value})' -c test2.json > matrix_data.json
-          cat matrix_data.json
-          cat matrix_data.json | jq
-          echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
+          #jq 'to_entries | map({batch: .key, accounts: .value})' -c test2.json > matrix_data.json
+          jq .keys test2.json > batch_keys.json  
+          cat batch_keys.json
+          jq -c test2.json > batches.json
+          #cat matrix_data.json
+          #cat matrix_data.json | jq
+          #echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
+          echo "batch_keys=$(cat batch_keys.json)" >> $GITHUB_OUTPUT
+          echo "batches=$(cat batches.json)" >> $GITHUB_OUTPUT
 
     outputs:
-      matrix_data: ${{ steps.output-batches.outputs.matrix_data }}
+      batch_keys: ${{ steps.output-batches.outputs.batch_keys }}
+      batches: ${{ steps.output-batches.outputs.batches }}
       
   call_reusable:
     needs: generate-targets
     strategy:
       matrix:
-        include: ${{ fromJSON(needs.generate-targets.outputs.matrix_data) }}
+        batch: ${{ fromJSON(needs.generate-targets.outputs.batch_keys) }}
     uses: ./.github/workflows/reusable.yaml
     with:
-      account-list: ${{ toJSON(matrix.accounts) }}
+      account-list: ${{ fromJSON(needs.generate-targets.outputs.batches)[matrix.batch] }}
