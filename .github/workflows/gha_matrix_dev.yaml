@@ -65,7 +65,7 @@ jobs:
           #jq 'to_entries | map({batch: .key, accounts: .value})' -c test2.json > matrix_data.json
           jq -c 'keys' test2.json > batch_keys.json  
           cat batch_keys.json
-          jq -c test2.json > batches.json
+          jq -c . test2.json > batches.json
           #cat matrix_data.json
           #cat matrix_data.json | jq
           #echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
