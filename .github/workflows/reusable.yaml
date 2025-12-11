@@ -11,6 +11,10 @@ on:
         type: string
         default: '[]'
 
+concurrency:
+  group: '${{ inputs.account-list }}'
+  cancel-in-progress: true
+
 permissions:
   id-token: write
   contents: read
@@ -28,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: 
-        target: ${{ inputs.account-list && fromJSON(inputs.account-list) || fromJSON('[]') }}
+        target: ${{ fromJSON(inputs.account-list) }}
       max-parallel: 5 
 
     steps:
