@@ -74,7 +74,7 @@ jobs:
     needs: generate-targets
     strategy:
       matrix:
-        batch: ${{ fromJSON(needs.generate-targets.outputs.matrix_data) }}
+        include: ${{ fromJSON(needs.generate-targets.outputs.matrix_data) }}
     uses: ./.github/workflows/reusable.yaml
     with:
       account-list: ${{ toJSON(matrix.accounts) }}
