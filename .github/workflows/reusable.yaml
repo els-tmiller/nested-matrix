@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: 
-        target: ${{ fromJSON(inputs.account-list) }}
+        target: ${{ inputs.account-list }}
       max-parallel: 5 
 
     steps:
