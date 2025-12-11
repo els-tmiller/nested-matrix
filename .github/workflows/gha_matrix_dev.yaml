@@ -27,6 +27,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Split List
+        id: split-list
+        run: |
+          echo ${{ steps.create-list.outputs.target_list }} > targets.json
+          jq '
+            def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
+        
+            . as $arr
+            | ($arr | length) as $len
+            | ($len / 5 | ceil) as $batches
+            | [range($batches) as $i
+                | { ("batch" + ($i + 1 | tostring)):
+                    $arr[ ($i * 5) : ($i * 5 + 5) ] }
+              ] | add
+          ' targets.json > batches.json
+          cat batches.json
+          cat batches.json| jq
       - name: Output Batches
         id: output-batches
         run: |
