@@ -83,4 +83,4 @@ jobs:
         batch: [batch1, batch2]
     uses: ./.github/workflows/reusable.yaml
     with:
-      account-list: [foo, bar]
+      account-list: '[foo, bar]'
