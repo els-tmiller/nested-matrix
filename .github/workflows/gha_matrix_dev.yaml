@@ -25,20 +25,35 @@ jobs:
   generate-targets:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Create List
+        id: create-list
+        run: |
+          echo "target_list='$(printf '%s\n' {1..${{ env.num_targets }}} | jq -R -s -c 'split("\n")[:-1]')'" >> $GITHUB_OUTPUT
+      - name: Split List
+        id: split-list
+        run: |
+          echo ${{ steps.create-list.outputs.target_list }} > targets.json
+          jq '
+            def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
+        
+            . as $arr
+            | ($arr | length) as $len
+            | ($len / 5 | ceil) as $batches
+            | [range($batches) as $i
+                | { ("batch" + ($i + 1 | tostring)):
+                    $arr[ ($i * 5) : ($i * 5 + 5) ] }
+              ] | add
+          ' targets.json > batches.json
       - name: Output Batches
         id: output-batches
         run: |
-          #jq -c 'keys' test.json > test_batches.json
-          #cat test_batches.json | jq 
-          #echo "batch_keys=$(cat test_batches.json)" >> $GITHUB_OUTPUT
-          #cat test.json | jq 
-          #jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
-          #jq 'to_entries | map({batch: .key, accounts: .value})' -c test.json > test_matrix_data.json
-          #cat matrix_data.json
-          #cat test_matrix_data.json
-          echo "matrix_data=$(cat test_map.json| jq -c)" >> $GITHUB_OUTPUT
+          echo '[{"batch":"batch1","accounts":[{"account_name":"aws-hs-core-engineering","account_number":"300384244247","account_profile":"aws-hs-core-engineering","business_unit":"tio","control_account":"105558157467"},{"account_name":"aws-root-delegation-nonprod","account_number":"275189445918","account_profile":"root-delegation-nonprod","business_unit":"tio","control_account":"105558157467"}]}]' > test.json
+          cat test.json
+          cat test.json | jq
+          cat batches.json
+          jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
+          cat matrix_data.json
+          echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
     outputs:
       matrix_data: ${{ steps.output-batches.outputs.matrix_data }}
       
@@ -46,7 +61,7 @@ jobs:
     needs: generate-targets
     strategy:
       matrix:
-        batch: ${{ fromJSON(needs.generate-targets.outputs.matrix_data) }}
+        include: ${{ fromJSON(needs.generate-targets.outputs.matrix_data) }}
     uses: ./.github/workflows/reusable.yaml
     with:
       account-list: ${{ toJSON(matrix.accounts) }}
