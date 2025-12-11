@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: 
-        target: ${{ fromJSON(inputs.account-list) }}
+        target: ${{ inputs.account-list && fromJSON(inputs.account-list) || fromJSON('[]') }}
       max-parallel: 5 
 
     steps:
