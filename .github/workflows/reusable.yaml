@@ -1,0 +1,42 @@
+name: GHA Reusable Workflow
+run-name: |
+  Targeting '${{ inputs.account-list }}'
+
+on:
+  workflow_call:
+    inputs:
+      account-list:
+        description: 'list of accounts'
+        required: true
+        type: string
+        default: '[]'
+
+concurrency:
+  group: '${{ inputs.account-list }}'
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  node_version: 19
+
+jobs:
+  hello_world:
+    name: Hello World
+    runs-on:
+      group: elsevier-standard-runners
+    timeout-minutes: 15
+    environment: workflow_dispatch
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix: 
+        target: ${{ fromJSON(inputs.account-list) }}
+      max-parallel: 5 
+
+    steps:
+      - name: output-string
+        run: |
+          echo "matrix.target"
