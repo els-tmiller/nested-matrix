@@ -28,11 +28,10 @@ jobs:
       - name: Create Account List
         run: |
           jq -n "[range(1; ${{ env.num_targets }} + 1)]" > accounts.json
+          jq . accounts.json
       - name: Create Batches
         id: create-batches
         run: |
-          echo '${{ needs.build-target-matrix.outputs.accounts }}' > accounts.json
-          cat accounts.json
           jq '
             def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
         
