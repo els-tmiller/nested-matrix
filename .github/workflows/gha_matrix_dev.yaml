@@ -32,6 +32,7 @@ jobs:
       - name: Create Batches
         id: create-batches
         run: |
+          jq . accounts.json
           jq '
             def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
         
@@ -43,9 +44,11 @@ jobs:
                     $arr[ ($i * ${{ env.max_targets_per_batch }}) : ($i * ${{ env.max_targets_per_batch }} + ${{ env.max_targets_per_batch }}) ] }
               ] | add
           ' accounts.json > batches.json
+          jq . batches.json
       - name: Output Batches
         id: output-batches
         run: |
+          jq . batches.json
           jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
           jq . matrix_data.json
           echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
