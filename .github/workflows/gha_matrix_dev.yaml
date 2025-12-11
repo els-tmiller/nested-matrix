@@ -80,7 +80,7 @@ jobs:
     needs: generate-targets
     strategy:
       matrix:
-        batch: ["batch1", "batch2"]
+        batch: ${{ fromJson('["batch1","batch2"]') }}
     uses: ./.github/workflows/reusable.yaml
     with:
       account-list: ${{ fromJSON(needs.generate-targets.outputs.batches)[matrix.batch] }}
