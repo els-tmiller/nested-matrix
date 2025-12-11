@@ -49,7 +49,10 @@ jobs:
       - name: Output Batches
         id: output-batches
         run: |
-          echo "matrix_data=$(jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json)" >> $GITHUB_OUTPUT
+          jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
+          cat matrix_data.json
+          cat matrix_data.json | jq
+          echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
     outputs:
       matrix_data: ${{ steps.output-batches.outputs.matrix_data }}
       
