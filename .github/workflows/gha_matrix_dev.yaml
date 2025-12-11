@@ -83,4 +83,4 @@ jobs:
         batch: [batch1, batch2]
     uses: ./.github/workflows/reusable.yaml
     with:
-      account-list: ${{ fromJSON(needs.generate-targets.outputs.batches)[matrix.batch] }}
+      account-list: [foo, bar]
