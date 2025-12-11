@@ -39,7 +39,7 @@ jobs:
           #cat matrix_data.json
           #cat test_matrix_data.json
           cat test_map.json | jq -c
-          echo "matrix_data=$(cat test_map.json| jq -c)" >> $GITHUB_OUTPUT
+          echo "matrix_data='$(cat test_map.json| jq -c)'" >> $GITHUB_OUTPUT
     outputs:
       matrix_data: ${{ steps.output-batches.outputs.matrix_data }}
       
