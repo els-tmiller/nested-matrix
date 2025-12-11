@@ -18,33 +18,47 @@ permissions:
 
 env:
   node_version: 19
-  num_targets: 20
-  max_targets_per_batch: 5
+  num_targets: 300
+  max_targets_per_batch: 50
 
 jobs:
   generate-targets:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Create Account List
+        run: |
+          jq -n "[range(1; ${{ env.num_targets }} + 1)]" > accounts.json
+      - name: Create Batches
+        id: create-batches
+        run: |
+          echo '${{ needs.build-target-matrix.outputs.accounts }}' > accounts.json
+          cat accounts.json
+          jq '
+            def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
+        
+            . as $arr
+            | ($arr | length) as $len
+            | ($len / ${{ env.max_targets_per_batch }} | ceil) as $batches
+            | [range($batches) as $i
+                | { ("batch" + ($i + 1 | tostring)):
+                    $arr[ ($i * ${{ env.max_targets_per_batch }}) : ($i * ${{ env.max_targets_per_batch }} + ${{ env.max_targets_per_batch }}) ] }
+              ] | add
+          ' accounts.json > batches.json
       - name: Output Batches
         id: output-batches
         run: |
-          jq -c 'keys' test2.json > batch_keys.json  
-          cat batch_keys.json
-          jq -c . test2.json > batches.json
-          echo "batch_keys=$(cat batch_keys.json)" >> $GITHUB_OUTPUT
-          echo "batches=$(cat batches.json)" >> $GITHUB_OUTPUT
+          jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
+          jq . matrix_data.json
+          echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
 
     outputs:
-      batch_keys: ${{ steps.output-batches.outputs.batch_keys }}
-      batches: ${{ steps.output-batches.outputs.batches }}
+      matrix_data: ${{ steps.output-batches.outputs.matrix_data }}
       
   call_reusable:
     needs: generate-targets
     strategy:
       matrix:
-        batch: ${{ fromJSON(needs.generate-targets.outputs.batch_keys) }}
+        includes: ${{ fromJSON(needs.generate-targets.outputs.matrix_data) }}
     uses: ./.github/workflows/reusable.yaml
     with:
-      account-list: ${{ toJSON(fromJSON(needs.generate-targets.outputs.batches)[matrix.batch]) }}
+      account-list: ${{ toJSON(matrix.accounts) }}
