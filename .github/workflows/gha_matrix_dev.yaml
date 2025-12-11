@@ -55,14 +55,14 @@ jobs:
           #jq 'to_entries | map({batch: .key, accounts: .value})' -c test.json > test_matrix_data.json
           #cat matrix_data.json
           #cat test_matrix_data.json
-          cat test_map.json | jq -c
+          #cat test_map.json | jq -c
           #echo "matrix_data='$(cat test_map.json| jq -c)'" >> $GITHUB_OUTPUT
           #jq 'to_entries | map({batch: .key, accounts: .value})' -c test.json > matrix_data.json
           #cat matrix_data.json
           #cat matrix_data.json | jq -c
           #echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
 
-          jq 'to_entries | map({batch: .key, accounts: .value})' -c batches.json > matrix_data.json
+          jq 'to_entries | map({batch: .key, accounts: .value})' -c test.json > matrix_data.json
           cat matrix_data.json
           cat matrix_data.json | jq
           echo "matrix_data=$(cat matrix_data.json)" >> $GITHUB_OUTPUT
