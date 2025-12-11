@@ -11,10 +11,6 @@ on:
         type: string
         default: '[]'
 
-concurrency:
-  group: '${{ inputs.account-list }}'
-  cancel-in-progress: true
-
 permissions:
   id-token: write
   contents: read
