@@ -1,0 +1,34 @@
+{
+  "batch1": [
+    {
+      "account_name": "bar1",
+      "account_number": "12",
+      "account_profile": "bar1-profile",
+      "business_unit": "abc",
+      "control_account": "9999"
+    },
+    {
+      "account_name": "bar2",
+      "account_number": "34",
+      "account_profile": "bar2-profile",
+      "business_unit": "def",
+      "control_account": "8888"
+    }
+  ],
+  "batch2": [
+    {
+      "account_name": "foo",
+      "account_number": "12345",
+      "account_profile": "foo-profile",
+      "business_unit": "hij",
+      "control_account": "7777"
+    },
+    {
+      "account_name": "bar",
+      "account_number": "67890",
+      "account_profile": "bar-profile",
+      "business_unit": "klm",
+      "control_account": "5555"
+    }
+  ]
+}
