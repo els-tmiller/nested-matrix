@@ -1,13 +1,6 @@
 {
   "batch1": [
     {
-      "account_name": "foo",
-      "account_number": "300384244247",
-      "account_profile": "aws-hs-core-engineering",
-      "business_unit": "tio",
-      "control_account": "105558157467"
-    },
-    {
       "account_name": "aws-root-delegation-nonprod",
       "account_number": "275189445918",
       "account_profile": "root-delegation-nonprod",
