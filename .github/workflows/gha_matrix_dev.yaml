@@ -69,6 +69,7 @@ jobs:
       matrix_data: ${{ steps.output-batches.outputs.matrix_data }}
       
   call_reusable:
+    name: ${{ matrix.batch }}
     needs: generate-targets
     strategy:
       matrix:
