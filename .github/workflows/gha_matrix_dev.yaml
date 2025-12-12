@@ -24,7 +24,10 @@ jobs:
   generate-targets:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Create Account List
+        if: false
         run: |
           jq -n "[range(1; ${{ env.num_targets }} + 1) | tostring]" > accounts.json
           jq . accounts.json
@@ -32,17 +35,27 @@ jobs:
         id: create-batches
         run: |
           jq . accounts.json
-          jq '
-            def ceil(n): if n == floor(n) then n else floor(n) + 1 end;
-        
-            . as $arr
-            | ($arr | length) as $len
-            | ($len / ${{ env.max_targets_per_batch }} | ceil) as $batches
-            | [range($batches) as $i
-                | { ("batch" + ($i + 1 | tostring)):
-                    $arr[ ($i * ${{ env.max_targets_per_batch }}) : ($i * ${{ env.max_targets_per_batch }} + ${{ env.max_targets_per_batch }}) ] }
-              ] | add
-          ' accounts.json > batches.json
+
+          # sort by BU
+          jq 'sort_by(.business_unit) | group_by(.business_unit) | map({ (.[0].business_unit): . }) | add' ./accounts.json > bu_accounts.json
+
+          # create batches if necessary
+          jq --argjson max_batch_size "${{ env.max_targets_per_batch }}" '
+            to_entries
+            | map(
+                if (.value | length) <= $max_batch_size then
+                  .
+                else
+                  ( . as $entry
+                    | ( $entry.value | length / $max_batch_size | ceil) as $num_batches
+                    | [range(0; $num_batches) as $i
+                       | {key: "\($entry.key)-batch\($i + 1)", value: ($entry.value[$i * $max_batch_size:(($i + 1) * $max_batch_size)])}]
+                    )
+                  | .[]
+                end
+              )
+            | from_entries
+          ' bu_accounts.json > batches.json
           jq . batches.json
       - name: Output Batches
         id: output-batches

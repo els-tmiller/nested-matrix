@@ -1,34 +1,58 @@
-{
-  "batch1": [
-    {
-      "account_name": "bar1",
-      "account_number": "12",
-      "account_profile": "bar1-profile",
-      "business_unit": "abc",
-      "control_account": "9999"
-    },
-    {
-      "account_name": "bar2",
-      "account_number": "34",
-      "account_profile": "bar2-profile",
-      "business_unit": "def",
-      "control_account": "8888"
-    }
-  ],
-  "batch2": [
-    {
-      "account_name": "foo",
-      "account_number": "12345",
-      "account_profile": "foo-profile",
-      "business_unit": "hij",
-      "control_account": "7777"
-    },
-    {
-      "account_name": "bar",
-      "account_number": "67890",
-      "account_profile": "bar-profile",
-      "business_unit": "klm",
-      "control_account": "5555"
-    }
-  ]
-}
+[
+  {
+    "account_name": "aws-ckstudent-nonprod",
+    "account_number": "182777348280",
+    "account_profile": "ckstudent-nonprod",
+    "business_unit": "h",
+    "control_account": "493278772854"
+  },
+  {
+    "account_name": "Reaxsys Backup",
+    "account_number": "692418438492",
+    "account_profile": "aws-hs-reaxsysback",
+    "business_unit": "cm",
+    "control_account": "493278772854"
+  },
+  {
+    "account_name": "Reaxys Production",
+    "account_number": "413164828489",
+    "account_profile": "aws-cm-reaxsysprod",
+    "business_unit": "cm",
+    "control_account": "493278772854"
+  },
+  {
+    "account_name": "SherPath-EOLS Backup",
+    "account_number": "518149864284",
+    "account_profile": "aws-hs-sherpatheolsback",
+    "business_unit": "h",
+    "control_account": "493278772854"
+  },
+  {
+    "account_name": "aws-hplatform-data-prod",
+    "account_number": "903461137992",
+    "account_profile": "aws-hplatform-data-prod",
+    "business_unit": "deng",
+    "control_account": "911444846276"
+  },
+  {
+    "account_name": "aws-hs-elsa-np",
+    "account_number": "425842292849",
+    "account_profile": "aws-hs-elsa-np",
+    "business_unit": "h",
+    "control_account": "493278772854"
+  },
+  {
+    "account_name": "aws-tio-nursingskills-prod",
+    "account_number": "517923584291",
+    "account_profile": "nursingskills-prod",
+    "business_unit": "h",
+    "control_account": "493278772854"
+  },
+  {
+    "account_name": "aws-h-edu-elsevieradvantage-prod",
+    "account_number": "114419821272",
+    "account_profile": "aws-h-edu-elsevieradvantage-prod",
+    "business_unit": "h",
+    "control_account": "493278772854"
+  }
+]
