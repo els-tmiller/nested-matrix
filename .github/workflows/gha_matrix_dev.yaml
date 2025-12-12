@@ -18,7 +18,7 @@ permissions:
 env:
   node_version: 19
   num_targets: 300
-  max_targets_per_batch: 50
+  max_targets_per_batch: 2
 
 jobs:
   generate-targets:
