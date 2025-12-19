@@ -1,4 +1,4 @@
-name: <reusable> GHA Matrix Workflow
+name: _reusable_ GHA Matrix Workflow
 run-name: |
   Targeting '${{ inputs.account-list }}'
 
